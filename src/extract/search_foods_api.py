@@ -6,7 +6,7 @@ import csv
 load_dotenv()
 
 def fetch_food_nutrition(food_item):
-    """Fetch nutritional data for a food item using the USDA FoodData Central API."""
+    """get nutritional data for a food item using the USDA API."""
     USDA_API_KEY = os.getenv('USDA_API_KEY')
     if not USDA_API_KEY:
         print("USDA API key is missing. Please check your .env file.")
@@ -56,7 +56,6 @@ def fetch_food_nutrition(food_item):
 
 
 def load_food_items_from_csv(file_name):
-    """Load food items from a CSV file."""
     # get directory of the current script
     script_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(script_dir, file_name)

@@ -104,7 +104,7 @@ def insert_nutrition_log(conn, users):
                     if nutrition:  # insert if data is available
                         crs.execute("""
                             INSERT INTO raw.nutrition_log 
-                            (user_id, date, food_item, meal_type, calories, carbs, protein, fat)
+                            (user_id, date, food_item, meal_type, calories_per_100g, carbs_per_100g, protein_per_100g, fat_per_100g)
                             VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                         """, (
                             user['user_id'], datetime.now().date() - timedelta(days=i),

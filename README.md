@@ -119,17 +119,17 @@ It tracks workouts, sleep, and nutrition data, providing real-time insights and 
 ---
 
 **nutrition_log** (Nutrition Data)
-| Column        | Description                          |
-|---------------|--------------------------------------|
-| `nutrition_id` (PK) | Unique nutrition entry ID       |
-| `user_id`     | Associated user ID                   |
-| `date`        | Entry date                           |
-| `food_item`   | Name of food item                    |
-| `meal_type`   | Meal type (e.g., breakfast, lunch)   |
-| `calories`    | Calories in the food item            |
-| `carbs`       | Grams of carbohydrates               |
-| `protein`     | Grams of protein                     |
-| `fat`         | Grams of fat                         |
+| Column               | Description                          |
+|-----------------------|--------------------------------------|
+| `nutrition_id` (PK)   | Unique nutrition entry ID            |
+| `user_id`            | Associated user ID                   |
+| `date`               | Entry date                           |
+| `food_item`          | Name of food item                    |
+| `meal_type`          | Meal type (e.g., breakfast, lunch)   |
+| `calories_per_100g`  | Calories per 100 grams of the food item |
+| `carbs_per_100g`     | Grams of carbohydrates per 100 grams |
+| `protein_per_100g`   | Grams of protein per 100 grams        |
+| `fat_per_100g`       | Grams of fat per 100 grams           |
 
 ---
 
