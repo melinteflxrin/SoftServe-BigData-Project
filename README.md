@@ -75,8 +75,7 @@ It tracks workouts, sleep, and nutrition data, providing real-time insights and 
 
 **Sources** 
 - **HealthApp** – Own platform data collected via the mobile app.  
-- [**OpenFoodFacts**](https://world.openfoodfacts.org/) – Partner platform providing food nutritional information.  
-- [**WorldTimeAPI**](http://worldtimeapi.org/) – Partner platform for time zone and datetime standardization.<br>  
+- [**USDA API**](https://www.ers.usda.gov/developer/data-apis/) – Partner platform providing food nutritional information.<br>  
 
 **Tables**
 
