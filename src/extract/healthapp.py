@@ -3,10 +3,11 @@ import random
 import json
 import requests
 import os
+import csv
 from datetime import datetime, timedelta
 from faker import Faker
 from dotenv import load_dotenv
-from search_foods_api import fetch_food_nutrition
+from search_foods_api import fetch_food_nutrition, load_food_items_from_csv
 
 # load environment variables from .env
 load_dotenv()
@@ -22,7 +23,7 @@ DB_CONFIG = {
     'port': os.getenv('DB_PORT', 5432)
 }
 
-NUM_USERS = 10
+NUM_USERS = 1
 DAYS = 7
 
 def connect_db():
@@ -88,13 +89,17 @@ def insert_sleep_log(conn, users):
                 ))
 
 def insert_nutrition_log(conn, users):
-    meals = ['breakfast', 'lunch', 'dinner', 'snack'] #all possible meal types
-    food_items = ['banana', 'apple', 'chicken breast', 'rice', 'broccoli', 'salmon']  # Example food items
+    meals = ['breakfast', 'lunch', 'dinner', 'snack']  # all possible meal types
+    food_items = load_food_items_from_csv('food_items_keywords.csv')  # load food items from csv
+    if not food_items:
+        print("No food items found in the CSV file. Skipping nutrition log insertion.")
+        return
+
     with conn.cursor() as crs:
         for user in users:
             for i in range(DAYS):
                 for meal in meals:
-                    food_item = random.choice(food_items)  # random food item
+                    food_item = random.choice(food_items)  # random food item from csv
                     nutrition = fetch_food_nutrition(food_item)  # get nutritional data from the API
                     if nutrition:  # insert if data is available
                         crs.execute("""
