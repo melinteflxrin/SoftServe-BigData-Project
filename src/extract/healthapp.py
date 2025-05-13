@@ -2,10 +2,11 @@ import psycopg2
 import random
 import json
 import requests
+import os
 from datetime import datetime, timedelta
 from faker import Faker
 from dotenv import load_dotenv
-import os
+from search_foods_api import fetch_food_nutrition
 
 # load environment variables from .env
 load_dotenv()
@@ -87,23 +88,27 @@ def insert_sleep_log(conn, users):
                 ))
 
 def insert_nutrition_log(conn, users):
-    meals = ['breakfast', 'lunch', 'dinner', 'snack']
+    meals = ['breakfast', 'lunch', 'dinner', 'snack'] #all possible meal types
+    food_items = ['banana', 'apple', 'chicken breast', 'rice', 'broccoli', 'salmon']  # Example food items
     with conn.cursor() as crs:
         for user in users:
             for i in range(DAYS):
                 for meal in meals:
-                    crs.execute("""
-                        INSERT INTO raw.nutrition_log 
-                        (user_id, date, food_item, meal_type, calories, carbs, protein, fat)
-                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                    """, (
-                        user['user_id'], datetime.now().date() - timedelta(days=i),
-                        fake.word(), meal,
-                        random.randint(100, 600),
-                        random.randint(10, 70),
-                        random.randint(5, 40),
-                        random.randint(5, 30)
-                    ))
+                    food_item = random.choice(food_items)  # random food item
+                    nutrition = fetch_food_nutrition(food_item)  # get nutritional data from the API
+                    if nutrition:  # insert if data is available
+                        crs.execute("""
+                            INSERT INTO raw.nutrition_log 
+                            (user_id, date, food_item, meal_type, calories, carbs, protein, fat)
+                            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                        """, (
+                            user['user_id'], datetime.now().date() - timedelta(days=i),
+                            nutrition['description'], meal,
+                            nutrition['calories'], nutrition['carbs'],
+                            nutrition['protein'], nutrition['fat']
+                        ))
+                    else:
+                        print(f"Skipping {food_item} due to missing nutritional data.")
 
 def insert_goals_log(conn, users):
     goal_types = ['activity', 'sleep', 'nutrition']
@@ -140,51 +145,6 @@ def run():
     finally:
         conn.close()
 
-def test_usda_api():
-    """Test the USDA FoodData Central API to fetch nutritional data for a food item."""
-    USDA_API_KEY = os.getenv('USDA_API_KEY')
-    if not USDA_API_KEY:
-        print("USDA API key is missing. Please check your .env file.")
-        return
-
-    food_item = "banana"  # Example food item
-    url = f"https://api.nal.usda.gov/fdc/v1/foods/search"
-    params = {
-        'query': food_item,
-        'pageSize': 1,  # Limit to 1 result
-        'api_key': USDA_API_KEY
-    }
-
-    try:
-        response = requests.get(url, params=params)
-        if response.status_code == 200:
-            data = response.json()
-            if 'foods' in data and len(data['foods']) > 0:
-                food = data['foods'][0]  # Get the first food result
-                print(f"Nutritional data for '{food_item}':")
-                print(f"Description: {food.get('description', 'N/A')}")
-
-                # Extract specific nutrients by name
-                nutrients = {n['nutrientName']: n for n in food.get('foodNutrients', [])}
-                calories = nutrients.get('Energy', {}).get('value', 'N/A')
-                carbs = nutrients.get('Carbohydrate, by difference', {}).get('value', 'N/A')
-                protein = nutrients.get('Protein', {}).get('value', 'N/A')
-                fat = nutrients.get('Total lipid (fat)', {}).get('value', 'N/A')
-
-                # Print the extracted values
-                print(f"Calories: {calories} kcal")
-                print(f"Carbs: {carbs} g")
-                print(f"Protein: {protein} g")
-                print(f"Fat: {fat} g")
-            else:
-                print(f"No nutritional data found for '{food_item}'.")
-        else:
-            print(f"Failed to fetch data from USDA API. Status code: {response.status_code}")
-            print(f"Response: {response.text}")
-    except Exception as e:
-        print(f"Error while calling USDA API: {e}")
-
 
 if __name__ == "__main__":
-    #run()
-    test_usda_api()
+    run()
