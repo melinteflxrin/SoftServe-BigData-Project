@@ -53,19 +53,4 @@ def fetch_food_nutrition(food_item):
     except Exception as e:
         print(f"Error while calling USDA API: {e}")
         return None
-
-
-def load_food_items_from_csv(file_name):
-    # get directory of the current script
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    file_path = os.path.join(script_dir, file_name)
-
-    food_items = []
-    try:
-        with open(file_path, mode='r') as file:
-            reader = csv.DictReader(file)
-            for row in reader:
-                food_items.append(row['food_item'])
-    except Exception as e:
-        print(f"Error reading food items from CSV: {e}")
-    return food_items   
+ 

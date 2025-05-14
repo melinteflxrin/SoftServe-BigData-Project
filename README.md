@@ -85,8 +85,8 @@ It tracks workouts, sleep, and nutrition data, providing real-time insights and 
 | `user_id`      | `SERIAL PK`      | Unique user identifier                            |
 | `name`         | `VARCHAR(100)`   | User's full name                                  |
 | `age`          | `INTEGER`        | User's age                                        |
-| `weight`       | `NUMERIC(5,1)`   | User's weight (kg)                                |
-| `height`       | `NUMERIC(5,1)`   | User's height (cm)                                |
+| `weight_kg`    | `NUMERIC(4,1)`   | User's weight (kg)                                |
+| `height_cm`    | `NUMERIC(4,1)`   | User's height (cm)                                |
 | `gender`       | `VARCHAR(10)`    | User's gender                                     |
 | `calorie_goal` | `INTEGER`        | Daily calorie goal                                |
 | `macro_goal`   | `JSON`           | Macro goals: carbs, protein, fat (as JSON object) |

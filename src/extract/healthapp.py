@@ -7,7 +7,8 @@ import csv
 from datetime import datetime, timedelta
 from faker import Faker
 from dotenv import load_dotenv
-from search_foods_api import fetch_food_nutrition, load_food_items_from_csv
+from search_foods_api import fetch_food_nutrition
+from load_data_from_csv import load_food_items_from_csv, load_activity_types_from_csv
 
 # load environment variables from .env
 load_dotenv()
@@ -23,54 +24,67 @@ DB_CONFIG = {
     'port': os.getenv('DB_PORT', 5432)
 }
 
-NUM_USERS = 1
-DAYS = 7
+# how many users to generate
+# and how many days of data to generate
+NUM_USERS = 2
+DAYS = 3
 
 def connect_db():
     return psycopg2.connect(**DB_CONFIG)
 
-def generate_user_profile(user_id):
+def generate_user_profile(user_id=None):
     return {
-        'user_id': user_id,
+        'user_id': user_id, 
         'name': fake.name(),
-        'age': random.randint(18, 60),
-        'weight': round(random.uniform(55, 100), 1),
-        'height': round(random.uniform(150, 200), 1),
+        'age': random.randint(18, 75),
+        'weight_kg': round(random.uniform(50, 150), 1),
+        'height_cm': round(random.uniform(150, 220), 1),
         'gender': random.choice(['Male', 'Female']),
-        'calorie_goal': random.choice([1800, 2000, 2200]),
+        'calorie_goal': random.randint(1500, 3500),
         'macro_goal': json.dumps({
-            'carbs': random.randint(200, 300),
-            'protein': random.randint(50, 150),
-            'fat': random.randint(40, 80)
+            'carbs': random.randint(200, 450),
+            'protein': random.randint(50, 280),
+            'fat': random.randint(40, 120)
         })
     }
 
 def insert_user_profiles(conn):
-    users = [generate_user_profile(i + 1) for i in range(NUM_USERS)]
+    users = []
     with conn.cursor() as crs:
-        for u in users:
+        for _ in range(NUM_USERS):
+            profile = generate_user_profile(user_id=None)
             crs.execute("""
                 INSERT INTO raw.user_profile 
-                (user_id, name, age, weight, height, gender, calorie_goal, macro_goal)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                (name, age, weight_kg, height_cm, gender, calorie_goal, macro_goal)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+                RETURNING user_id
             """, (
-                u['user_id'], u['name'], u['age'], u['weight'], u['height'],
-                u['gender'], u['calorie_goal'], u['macro_goal']
+                profile['name'], profile['age'], profile['weight_kg'], profile['height_cm'],
+                profile['gender'], profile['calorie_goal'], profile['macro_goal']
             ))
+            new_user_id = crs.fetchone()[0]
+            profile['user_id'] = new_user_id
+            users.append(profile)
     return users
 
 def insert_activity_log(conn, users):
+    activity_types = load_activity_types_from_csv('activity_types.csv')  
+    if not activity_types:
+        print("No activity types found in the CSV file. Skipping activity log insertion.")
+        return
+
     with conn.cursor() as crs:
         for user in users:
             for i in range(DAYS):
                 ts = datetime.now() - timedelta(days=i)
+                activity = random.choice(activity_types)  
                 crs.execute("""
                     INSERT INTO raw.activity_log 
                     (user_id, timestamp, activity_type, steps, heart_rate, calories_burned)
                     VALUES (%s, %s, %s, %s, %s, %s)
                 """, (
-                    user['user_id'], ts, random.choice(['walking', 'running']),
-                    random.randint(2000, 10000), random.randint(60, 150), random.randint(150, 800)
+                    user['user_id'], ts, activity,
+                    random.randint(1000, 20000), random.randint(60, 150), random.randint(150, 800)
                 ))
 
 def insert_sleep_log(conn, users):
