@@ -40,26 +40,16 @@ It tracks activity, sleep, and nutrition data, providing real-time insights and 
 
 ### Reports  
 - Daily caloric intake vs goal  
-- Macronutrient (carbs/fat/protein) breakdown by day  
-- Exercise and calorie burn vs intake analysis  
-- Goal reports (weekly % of goals met)  
-- Weight and BMI trend over time
+- Macronutrient breakdown (carbs, fat, protein)  
+- Exercise and calorie burn analysis  
+- Weekly goal adherence (% of goals met)  
+- Weight and BMI trends  
 
 ### Dashboards  
-- **Nutrition Dashboard**  
-  - Current day caloric intake vs goal  
-  - Macro distribution pie chart  
-  - Foods with highest calories/macros  
-- **Activity Dashboard**  
-  - Steps, heart rate, calories burned per day  
-  - Active minutes vs sedentary time  
-- **Sleep Dashboard**  
-  - Sleep quality score, total hours slept  
-  - Sleep start/end times  
-- **Progress Tracker**  
-  - Goal streak  
-  - Weight loss/gain vs plan  
-  - Daily health score
+- **Nutrition**: Caloric intake vs goal, macro distribution, top calorie foods  
+- **Activity**: Steps, heart rate, calories burned, active vs sedentary time  
+- **Sleep**: Sleep quality, total hours, start/end times  
+- **Progress Tracker**: Goal streak, weight trends, daily health score 
 
 ### KPIs  
 - % of users hitting daily calorie goals  
