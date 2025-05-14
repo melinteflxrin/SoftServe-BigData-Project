@@ -26,8 +26,8 @@ DB_CONFIG = {
 
 # how many users to generate
 # and how many days of data to generate
-NUM_USERS = 2
-DAYS = 3
+NUM_USERS = 10
+DAYS = 7
 
 def connect_db():
     return psycopg2.connect(**DB_CONFIG)

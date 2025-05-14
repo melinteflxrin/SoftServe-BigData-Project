@@ -1,3 +1,6 @@
+"""
+For testing purposes, this script clears all data from the raw tables.
+"""
 TRUNCATE TABLE raw.user_profile RESTART IDENTITY CASCADE;
 DELETE FROM raw.activity_log;
 DELETE FROM raw.sleep_log;
