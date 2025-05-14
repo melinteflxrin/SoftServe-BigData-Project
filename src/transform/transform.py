@@ -34,8 +34,17 @@ def run_transformations():
     """Run all transformation scripts."""
     conn = connect_db()
     try:
-        print("Transforming data...")
+        print("Ensuring tables exist...")
         base_path = os.path.join(os.path.dirname(__file__), '../../sql/tables/staging/')
+        # create tables if they dont already exist
+        execute_sql(conn, os.path.join(base_path, 'create_stg_user_profile_table.sql'))
+        execute_sql(conn, os.path.join(base_path, 'create_stg_activity_log_table.sql'))
+        execute_sql(conn, os.path.join(base_path, 'create_stg_sleep_log_table.sql'))
+        execute_sql(conn, os.path.join(base_path, 'create_stg_nutrition_log_table.sql'))
+        execute_sql(conn, os.path.join(base_path, 'create_stg_goals_log_table.sql'))
+
+        print("Transforming data...")
+        # insert data into tables
         execute_sql(conn, os.path.join(base_path, 'insert_stg_user_profile.sql'))
         execute_sql(conn, os.path.join(base_path, 'insert_stg_activity_log.sql'))
         execute_sql(conn, os.path.join(base_path, 'insert_stg_sleep_log.sql'))

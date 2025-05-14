@@ -1,4 +1,4 @@
-CREATE TABLE raw.nutrition_log (
+CREATE TABLE IF NOT EXISTS raw.nutrition_log (
     nutrition_id       SERIAL PRIMARY KEY,
     user_id            INTEGER,
     date               DATE,

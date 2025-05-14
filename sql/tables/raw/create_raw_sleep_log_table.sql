@@ -1,4 +1,4 @@
-CREATE TABLE raw.sleep_log (
+CREATE TABLE IF NOT EXISTS raw.sleep_log (
     sleep_id            SERIAL PRIMARY KEY,
     user_id             INTEGER,
     date                DATE,

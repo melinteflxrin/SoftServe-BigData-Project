@@ -1,4 +1,4 @@
-CREATE TABLE staging.user_profile AS
+CREATE TABLE IF NOT EXISTS staging.user_profile AS
 SELECT
     user_id,
     INITCAP(TRIM(name)) AS name,

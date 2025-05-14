@@ -1,4 +1,4 @@
-CREATE TABLE staging.goals_log AS
+CREATE TABLE IF NOT EXISTS staging.goals_log AS
 SELECT
     goal_id,
     user_id,

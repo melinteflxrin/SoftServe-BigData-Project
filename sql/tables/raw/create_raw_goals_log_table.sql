@@ -1,4 +1,4 @@
-CREATE TABLE raw.goals_log (
+CREATE TABLE IF NOT EXISTS raw.goals_log (
     goal_id       SERIAL PRIMARY KEY,
     user_id       INTEGER,
     date          DATE,

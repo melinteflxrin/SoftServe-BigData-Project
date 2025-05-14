@@ -1,4 +1,4 @@
-CREATE TABLE raw.activity_log (
+CREATE TABLE IF NOT EXISTS raw.activity_log (
     activity_id      SERIAL PRIMARY KEY,
     user_id          INTEGER,
     timestamp        TIMESTAMP,

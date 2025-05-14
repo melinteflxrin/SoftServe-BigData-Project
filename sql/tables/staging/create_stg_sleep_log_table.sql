@@ -1,4 +1,4 @@
-CREATE TABLE staging.sleep_log AS
+CREATE TABLE IF NOT EXISTS staging.sleep_log AS
 SELECT
     sleep_id,
     user_id,

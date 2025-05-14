@@ -1,4 +1,4 @@
-CREATE TABLE raw.user_profile (
+CREATE TABLE IF NOT EXISTS raw.user_profile (
     user_id         SERIAL PRIMARY KEY,
     name            VARCHAR(100),
     age             INTEGER,

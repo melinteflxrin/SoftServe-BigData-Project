@@ -1,4 +1,4 @@
-CREATE TABLE staging.nutrition_log AS
+CREATE TABLE IF NOT EXISTS staging.nutrition_log AS
 SELECT
      nutrition_id,
     user_id,
