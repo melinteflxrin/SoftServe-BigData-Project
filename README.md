@@ -1,46 +1,51 @@
 # Data Warehousing Project:<br/> Health, Fitness & Nutrition Analytics
 
 ## Table of contents
-1. [Scenario](#scenario)
-2. [Business Requirements & Goals](#business-requirements--goals)
-3. [Reports, Dashboards & KPIs](#reports-dashboards--kpis)
-4. [Data Warehouse Design, Tables & Sources](#data-warehouse-design-tables--sources)
+1. [Scenario](#1-scenario)
+2. [Business Requirements & Goals](#2-business-requirements--goals)
+3. [Reports, Dashboards & KPIs](#3-reports-dashboards--kpis)
+4. [Data Warehouse Design, Tables & Sources](#4-data-warehouse-design-tables--sources)<br>
+   4.1 [APIs and Data Sources](#41-apis-and-data-sources)<br>
+   4.2 [ETL Process](#42-etl-process)<br>
+   4.3 [Schemas](#43-schemas)<br>
+      - [Raw Schema](#raw-schema)<br>
+      - [Staging Schema](#staging-schema)<br>
+      - [Trusted Schema](#trusted-schema)<br>
 
 ---
 
-## Scenario
+## 1. Scenario
 
 You are a data engineer at a health-tech startup that develops a mobile app to monitor user health.<br>
-It tracks workouts, sleep, and nutrition data, providing real-time insights and analytics over time.
+It tracks activity, sleep, and nutrition data, providing real-time insights and analytics over time.
 
 ---
 
-## Business Requirements & Goals
+## 2. Business Requirements & Goals
 
-**Business Requirements**  
-- Provide health analytics for users (fitness, nutrition, sleep).  
+### Business Requirements 
+- Provide health analytics for users (nutrition,fitness,sleep).  
 - Help users track progress toward personal goals.  
 - Offer predictive insights into calorie balance and fitness level trends.  
 
-**Core Business Goals**  
+### Core Business Goals 
 - **Activity Monitoring** – Collect and visualize daily activity metrics (steps, heart rate, calories burned).  
 - **Sleep Insights** – Track sleep duration and quality.  
 - **Nutrition Tracking** – Monitor daily caloric intake and macro goals.  
 - **Goal Adherence** – Analyze user behavior around set goals.  
-- **Behavioral Insights** – Provide early signals for health improvement or risk.
 
 ---
 
-## Reports, Dashboards & KPIs
+## 3. Reports, Dashboards & KPIs
 
-**Reports**  
+### Reports  
 - Daily caloric intake vs goal  
 - Macronutrient (carbs/fat/protein) breakdown by day  
 - Exercise and calorie burn vs intake analysis  
 - Goal reports (weekly % of goals met)  
 - Weight and BMI trend over time
 
-**Dashboards**  
+### Dashboards  
 - **Nutrition Dashboard**  
   - Current day caloric intake vs goal  
   - Macro distribution pie chart  
@@ -56,7 +61,7 @@ It tracks workouts, sleep, and nutrition data, providing real-time insights and 
   - Weight loss/gain vs plan  
   - Daily health score
 
-**KPIs**  
+### KPIs  
 - % of users hitting daily calorie goals  
 - Average macronutrient distribution per user  
 - % of users achieving weekly fitness targets  
@@ -67,80 +72,67 @@ It tracks workouts, sleep, and nutrition data, providing real-time insights and 
 
 ---
 
-## Data Warehouse Design, Tables & Sources
+## 4. Data Warehouse Design, Tables & Sources
 
-**Data Warehouse Design**  
-- **Server**: `health_dw`  
-- **Database**: `health_analytics_db`  
+### 4.1 APIs and Data Sources
 
-**Sources** 
-- **HealthApp** – Own platform data collected via the mobile app.  
-- [**USDA API**](https://www.ers.usda.gov/developer/data-apis/) – Partner platform providing food nutritional information.<br>  
-
-**Tables**
-
-**user_profile** (Personal Info)
-| Column         | Data Type        | Description                                       |
-|----------------|------------------|---------------------------------------------------|
-| `user_id`      | `SERIAL PK`      | Unique user identifier                            |
-| `name`         | `VARCHAR(100)`   | User's full name                                  |
-| `age`          | `INTEGER`        | User's age                                        |
-| `weight_kg`    | `NUMERIC(4,1)`   | User's weight (kg)                                |
-| `height_cm`    | `NUMERIC(4,1)`   | User's height (cm)                                |
-| `gender`       | `VARCHAR(10)`    | User's gender                                     |
-| `calorie_goal` | `INTEGER`        | Daily calorie goal                                |
-| `macro_goal`   | `JSON`           | Macro goals: carbs, protein, fat (as JSON object) |
+- **HealthApp**: Synthetic data is generated using the `healthapp.py` script.  
+  - To generate raw data, run the following command:
+    ```bash
+    python src/extract/healthapp.py
+    ```
+  - This script creates the necessary schemas and tables in the `raw` schema (if they do not already exist) and populates them with data for user profiles, activity logs, sleep logs, nutrition logs, and goals logs.  
+- [**USDA API**](https://www.ers.usda.gov/developer/data-apis/): Nutritional data for food items is fetched dynamically via API calls within the `healthapp.py` script.  
 
 ---
 
-**activity_log** (Fitness Data)
-| Column           | Data Type        | Description                                      |
-|------------------|------------------|--------------------------------------------------|
-| `activity_id`    | `SERIAL PK`      | Unique activity ID                               |
-| `user_id`        | `INTEGER FK`     | References `user_profile(user_id)`               |
-| `timestamp`      | `TIMESTAMP`      | Date and time of activity                        |
-| `activity_type`  | `VARCHAR(50)`    | Type of activity (e.g., walking, running)        |
-| `steps`          | `INTEGER`        | Number of steps                                  |
-| `heart_rate`     | `INTEGER`        | Heart rate during activity                       |
-| `calories_burned`| `INTEGER`        | Calories burned during activity                  |
+### 4.2 ETL Process
+
+The ETL pipeline consists of the following steps:
+
+1. **Extract**:  
+   - Data is extracted from the `HealthApp` and `USDA API`.  
+   - The `healthapp.py` script handles the extraction of synthetic data and API calls.  
+
+2. **Transform**:  
+   - Data is cleaned and transformed using the `transform.py` script.  
+   - To run the transformation process, use the following command:
+     ```bash
+     python src/transform/transform.py
+     ```
+
+3. **Load**:  
+   - Transformed data is loaded into the `staging` and `trusted` schemas.  
 
 ---
 
-**sleep_log** (Sleep Data)
-| Column               | Data Type        | Description                                      |
-|----------------------|------------------|--------------------------------------------------|
-| `sleep_id`           | `SERIAL PK`      | Unique sleep log ID                              |
-| `user_id`            | `INTEGER FK`     | References `user_profile(user_id)`               |
-| `date`               | `DATE`           | Sleep date                                       |
-| `sleep_start`        | `TIMESTAMP`      | Sleep start time                                 |
-| `sleep_end`          | `TIMESTAMP`      | Sleep end time                                   |
-| `sleep_quality_score`| `INTEGER`        | Sleep quality score                              |
+### 4.3 Schemas
 
+The data warehouse is organized into three schemas: **raw**, **staging**, and **trusted**. Each schema serves a specific purpose in the ETL pipeline:
 
----
+#### Raw Schema
+- **Purpose**: The initial storage for raw, unprocessed data directly extracted from the sources.  
+- **Tables**:  
+  - `raw.user_profile`  
+  - `raw.activity_log`  
+  - `raw.sleep_log`  
+  - `raw.nutrition_log`  
+  - `raw.goals_log`  
 
-**nutrition_log** (Nutrition Data)
-| Column               | Data Type        | Description                                      |
-|----------------------|------------------|--------------------------------------------------|
-| `nutrition_id`       | `SERIAL PK`      | Unique nutrition entry ID                        |
-| `user_id`            | `INTEGER FK`     | References `user_profile(user_id)`               |
-| `date`               | `DATE`           | Entry date                                       |
-| `food_item`          | `VARCHAR(100)`   | Name of food item                                |
-| `meal_type`          | `VARCHAR(20)`    | Meal type (e.g., breakfast, lunch)               |
-| `calories_per_100g`  | `INTEGER`        | Calories per 100 grams                           |
-| `carbs_per_100g`     | `INTEGER`        | Carbs per 100g (grams)                           |
-| `protein_per_100g`   | `INTEGER`        | Protein per 100g (grams)                         |
-| `fat_per_100g`       | `INTEGER`        | Fat per 100g (grams)                             |
+#### Staging Schema
+- **Purpose**: Stores cleaned and transformed data, ready for further processing.  
+- **Tables**:  
+  - `staging.user_profile`  
+  - `staging.activity_log`  
+  - `staging.sleep_log`  
+  - `staging.nutrition_log`  
+  - `staging.goals_log`  
 
----
-
-**goals_log** (Goal Tracking)
-| Column         | Data Type        | Description                                      |
-|----------------|------------------|--------------------------------------------------|
-| `goal_id`      | `SERIAL PK`      | Unique goal ID                                   |
-| `user_id`      | `INTEGER FK`     | References `user_profile(user_id)`               |
-| `date`         | `DATE`           | Date the goal applies to                         |
-| `goal_type`    | `VARCHAR(50)`    | Goal category (activity, sleep, nutrition)       |
-| `target_value` | `INTEGER`        | Intended target                                  |
-| `actual_value` | `INTEGER`        | Actual value achieved                            |
-| `status`       | `VARCHAR(10)`    | Status (e.g., met / not met)                     |
+#### Trusted Schema
+- **Purpose**: Stores the final, fully processed data that is ready for analytics and reporting.  
+- **Tables**:  
+  - `trusted.user_profile`  
+  - `trusted.activity_summary`  
+  - `trusted.sleep_summary`  
+  - `trusted.nutrition_summary`  
+  - `trusted.goal_adherence`  
