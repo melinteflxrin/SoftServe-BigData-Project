@@ -80,66 +80,67 @@ It tracks workouts, sleep, and nutrition data, providing real-time insights and 
 **Tables**
 
 **user_profile** (Personal Info)
-| Column         | Description                      |
-|----------------|----------------------------------|
-| `user_id` (PK) | Unique user identifier           |
-| `name`         | User's full name                 |
-| `age`          | User's age                       |
-| `weight`       | User's weight                    |
-| `height`       | User's height                    |
-| `gender`       | User's gender                    |
-| `calorie_goal` | Daily calorie goal               |
-| `macro_goal`   | Macro goals (JSON: carbs, protein, fat) |
+| Column         | Data Type        | Description                                       |
+|----------------|------------------|---------------------------------------------------|
+| `user_id`      | `SERIAL PK`      | Unique user identifier                            |
+| `name`         | `VARCHAR(100)`   | User's full name                                  |
+| `age`          | `INTEGER`        | User's age                                        |
+| `weight`       | `NUMERIC(5,1)`   | User's weight (kg)                                |
+| `height`       | `NUMERIC(5,1)`   | User's height (cm)                                |
+| `gender`       | `VARCHAR(10)`    | User's gender                                     |
+| `calorie_goal` | `INTEGER`        | Daily calorie goal                                |
+| `macro_goal`   | `JSON`           | Macro goals: carbs, protein, fat (as JSON object) |
 
 ---
 
 **activity_log** (Fitness Data)
-| Column           | Description                       |
-|------------------|-----------------------------------|
-| `activity_id` (PK)| Unique activity identifier       |
-| `user_id`         | Associated user ID               |
-| `timestamp`       | Date and time of activity        |
-| `activity_type`   | Type of activity (e.g., running) |
-| `steps`           | Number of steps                  |
-| `heart_rate`      | Heart rate during activity       |
-| `calories_burned` | Calories burned during activity  |
+| Column           | Data Type        | Description                                      |
+|------------------|------------------|--------------------------------------------------|
+| `activity_id`    | `SERIAL PK`      | Unique activity ID                               |
+| `user_id`        | `INTEGER FK`     | References `user_profile(user_id)`               |
+| `timestamp`      | `TIMESTAMP`      | Date and time of activity                        |
+| `activity_type`  | `VARCHAR(50)`    | Type of activity (e.g., walking, running)        |
+| `steps`          | `INTEGER`        | Number of steps                                  |
+| `heart_rate`     | `INTEGER`        | Heart rate during activity                       |
+| `calories_burned`| `INTEGER`        | Calories burned during activity                  |
 
 ---
 
 **sleep_log** (Sleep Data)
-| Column               | Description                  |
-|----------------------|------------------------------|
-| `sleep_id` (PK)      | Unique sleep log ID          |
-| `user_id`            | Associated user ID           |
-| `date`               | Sleep date                   |
-| `sleep_start`        | Sleep start time             |
-| `sleep_end`          | Sleep end time               |
-| `sleep_quality_score`| Numeric score of sleep quality |
+| Column               | Data Type        | Description                                      |
+|----------------------|------------------|--------------------------------------------------|
+| `sleep_id`           | `SERIAL PK`      | Unique sleep log ID                              |
+| `user_id`            | `INTEGER FK`     | References `user_profile(user_id)`               |
+| `date`               | `DATE`           | Sleep date                                       |
+| `sleep_start`        | `TIMESTAMP`      | Sleep start time                                 |
+| `sleep_end`          | `TIMESTAMP`      | Sleep end time                                   |
+| `sleep_quality_score`| `INTEGER`        | Sleep quality score                              |
+
 
 ---
 
 **nutrition_log** (Nutrition Data)
-| Column               | Description                          |
-|-----------------------|--------------------------------------|
-| `nutrition_id` (PK)   | Unique nutrition entry ID            |
-| `user_id`            | Associated user ID                   |
-| `date`               | Entry date                           |
-| `food_item`          | Name of food item                    |
-| `meal_type`          | Meal type (e.g., breakfast, lunch)   |
-| `calories_per_100g`  | Calories per 100 grams of the food item |
-| `carbs_per_100g`     | Grams of carbohydrates per 100 grams |
-| `protein_per_100g`   | Grams of protein per 100 grams        |
-| `fat_per_100g`       | Grams of fat per 100 grams           |
+| Column               | Data Type        | Description                                      |
+|----------------------|------------------|--------------------------------------------------|
+| `nutrition_id`       | `SERIAL PK`      | Unique nutrition entry ID                        |
+| `user_id`            | `INTEGER FK`     | References `user_profile(user_id)`               |
+| `date`               | `DATE`           | Entry date                                       |
+| `food_item`          | `VARCHAR(100)`   | Name of food item                                |
+| `meal_type`          | `VARCHAR(20)`    | Meal type (e.g., breakfast, lunch)               |
+| `calories_per_100g`  | `INTEGER`        | Calories per 100 grams                           |
+| `carbs_per_100g`     | `INTEGER`        | Carbs per 100g (grams)                           |
+| `protein_per_100g`   | `INTEGER`        | Protein per 100g (grams)                         |
+| `fat_per_100g`       | `INTEGER`        | Fat per 100g (grams)                             |
 
 ---
 
 **goals_log** (Goal Tracking)
-| Column         | Description                          |
-|----------------|--------------------------------------|
-| `goal_id` (PK) | Unique goal ID                       |
-| `user_id`      | Associated user ID                   |
-| `date`         | Date the goal applies to             |
-| `goal_type`    | Goal category (activity, sleep, etc.)|
-| `target_value` | Intended target                      |
-| `actual_value` | Value achieved                       |
-| `status`       | Status (met / not met)               |
+| Column         | Data Type        | Description                                      |
+|----------------|------------------|--------------------------------------------------|
+| `goal_id`      | `SERIAL PK`      | Unique goal ID                                   |
+| `user_id`      | `INTEGER FK`     | References `user_profile(user_id)`               |
+| `date`         | `DATE`           | Date the goal applies to                         |
+| `goal_type`    | `VARCHAR(50)`    | Goal category (activity, sleep, nutrition)       |
+| `target_value` | `INTEGER`        | Intended target                                  |
+| `actual_value` | `INTEGER`        | Actual value achieved                            |
+| `status`       | `VARCHAR(10)`    | Status (e.g., met / not met)                     |
