@@ -13,7 +13,10 @@ NO_DAYS = 2
 NO_USERS = 2  
 
 class DatabaseManager:
+    """manages database connection and schema/table creation."""
+
     def __init__(self):
+        """initialize the DatabaseManager with database configuration."""
         load_dotenv()
         self.db_config = {
             'dbname': os.getenv('DB_NAME', 'health_fitness_db'),
@@ -24,37 +27,47 @@ class DatabaseManager:
         }
 
     def connect(self):
+        """connect to the database."""
         return psycopg2.connect(**self.db_config)
 
     @staticmethod
     def load_sql(file_path):
+        """load SQL from a file."""
         with open(file_path, 'r') as file:
             return file.read()
 
     def execute_sql(self, conn, sql_file):
+         """execute SQL from a file."""
         sql = self.load_sql(sql_file)
         with conn.cursor() as crs:
             crs.execute(sql)
             print(f"Executed SQL from {sql_file}")
 
     def ensure_schemas_exist(self, conn):
+         """ensure required schemas exist in the database."""
         base_path = os.path.join(os.path.dirname(__file__), '../../sql/schemas/')
         self.execute_sql(conn, os.path.join(base_path, 'create_raw_schema.sql'))
         self.execute_sql(conn, os.path.join(base_path, 'create_staging_schema.sql'))
         self.execute_sql(conn, os.path.join(base_path, 'create_trusted_schema.sql'))
 
     def ensure_tables_exist(self, conn):
+         """ensure required tables exist in the database."""
         base_path = os.path.join(os.path.dirname(__file__), '../../sql/tables/raw/')
         self.execute_sql(conn, os.path.join(base_path, 'create_raw_user_data_table.sql'))
         self.execute_sql(conn, os.path.join(base_path, 'create_raw_nutrition_log_table.sql'))
 
 
 class UserProfileGenerator:
+    """generates synthetic user profiles."""
+
     def __init__(self, num_users=NO_USERS):  
+        """initialize the UserProfileGenerator with the number of users to generate."""
+        self.num_users = num_users
         self.num_users = num_users
         self.fake = Faker()
 
     def generate_user_profile(self, user_id=None):
+         """generate a single user profile."""
         if user_id is None:
             user_id = random.randint(1, 1000000)
 
@@ -74,15 +87,20 @@ class UserProfileGenerator:
         }
 
     def generate_user_profiles(self):
+        """generate multiple user profiles."""
         return [self.generate_user_profile() for _ in range(self.num_users)]
 
 
 class DataInserter:
+     """handle the insertion of data into the database."""
+
     def __init__(self, conn, days=NO_DAYS):  
         self.conn = conn
         self.days = days
 
     def insert_user_data(self, users):
+        """initialize the DataInserter with a database connection and number of days."""
+
         sql_file = os.path.join(os.path.dirname(__file__), '../../sql/tables/raw/insert_raw_user_data.sql')
         activity_types = load_activity_types_from_csv('activity_types.csv')
         if not activity_types:
@@ -117,6 +135,7 @@ class DataInserter:
                     ))
 
     def insert_nutrition_log(self, users):
+        """insert nutrition data from the API."""
         sql_file = os.path.join(os.path.dirname(__file__), '../../sql/tables/raw/insert_raw_nutrition_log.sql')
         meals = ['breakfast', 'lunch', 'dinner', 'snack']
         food_items = load_food_items_from_csv('food_items_keywords.csv')

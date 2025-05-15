@@ -8,7 +8,7 @@ DATA_DIR = os.path.join(BASE_DIR, '..', 'data')  # go to 'data' folder
 
 
 def load_food_items_from_csv(file_name):
-    """Load food items from a CSV file."""
+    """load food items from a CSV file."""
     food_items = []
     file_path = os.path.join(DATA_DIR, file_name) 
     try:
@@ -22,7 +22,7 @@ def load_food_items_from_csv(file_name):
 
 
 def load_activity_types_from_csv(file_name):
-    """Load activity types from a CSV file."""
+    """load activity types from a CSV file."""
     activity_types = []
     file_path = os.path.join(DATA_DIR, file_name) 
     try:
