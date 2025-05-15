@@ -102,27 +102,111 @@ The data warehouse is organized into three schemas: **raw**, **staging**, and **
 
 #### Raw Schema
 - **Purpose**: The initial storage for raw, unprocessed data directly extracted from the sources.  
-- **Tables**:  
-  - `raw.user_profile`  
-  - `raw.activity_log`  
-  - `raw.sleep_log`  
-  - `raw.nutrition_log`  
-  - `raw.goals_log`  
+
+#### `raw.user_data`
+| Column Name       | Data Type     | Description                                      |
+|-------------------|--------------|--------------------------------------------------|
+| `record_id`       | `SERIAL PRIMARY KEY`  | Unique identifier for each record.      |
+| `user_id`         | `INTEGER`    | Unique identifier for the user.                 |
+| `name`            | `VARCHAR(100)` | User's name.                                   |
+| `age`             | `INTEGER`    | User's age.                                     |
+| `weight_kg`       | `NUMERIC(4,1)` | User's weight in kilograms.                    |
+| `height_cm`       | `NUMERIC(4,1)` | User's height in centimeters.                  |
+| `gender`          | `VARCHAR(10)` | User's gender.                                  |
+| `calorie_goal`    | `INTEGER`    | Daily calorie goal for the user.                |
+| `macro_goal`      | `JSON`       | JSON object containing macro goals (carbs, protein, fat). |
+| `activity_start`  | `TIMESTAMP`  | Start time of the activity.                     |
+| `activity_type`   | `VARCHAR(50)` | Type of activity (e.g., walking, running).      |
+| `steps`           | `INTEGER`    | Daily step count                                |
+| `heart_rate`      | `INTEGER`    | Heart rate during the activity.                 |
+| `calories_burned` | `INTEGER`    | Calories burned during the day.                 |
+| `sleep_start`     | `TIMESTAMP`  | Start time of sleep.                            |
+| `sleep_end`       | `TIMESTAMP`  | End time of sleep.                              |
+| `sleep_quality_score` | `INTEGER` | Quality score of sleep.                         |
+| `goal_type`       | `VARCHAR(50)` | Type of goal (e.g., calories burned, steps taken). |
+| `goal_target`     | `INTEGER`    | Target value for the goal.                      |
+| `created_at`      | `TIMESTAMP`  | Timestamp when the record was created.          |
+
+#### `raw.nutrition_log`
+| Column Name       | Data Type     | Description                                      |
+|-------------------|--------------|--------------------------------------------------|
+| `nutrition_id`    | `SERIAL PRIMARY KEY` | Unique identifier for the nutrition record.  |
+| `user_id`         | `INTEGER`     | Unique identifier for the user.                 |
+| `date`            | `DATE`       | Date of the nutrition log.                      |
+| `food_item`       | `VARCHAR(255)` | Name of the food item.                         |
+| `meal_type`       | `VARCHAR(100)` | Type of meal (e.g., breakfast, lunch).         |
+| `calories_per_100g` | `INTEGER` | Calories per 100 grams of the food item.     |
+| `carbs_per_100g`  | `INTEGER` | Carbohydrates per 100 grams of the food item. |
+| `protein_per_100g` | `INTEGER` | Protein per 100 grams of the food item.       |
+| `fat_per_100g`    | `INTEGER` | Fat per 100 grams of the food item.           |
+
+---
 
 #### Staging Schema
 - **Purpose**: Stores cleaned and transformed data, ready for further processing.  
-- **Tables**:  
-  - `staging.user_profile`  
-  - `staging.activity_log`  
-  - `staging.sleep_log`  
-  - `staging.nutrition_log`  
-  - `staging.goals_log`  
+
+#### `staging.dim_user_profile`
+| Column Name       | Data Type     | Description                                      |
+|-------------------|--------------|--------------------------------------------------|
+| `user_id`         | `BIGINT PRIMARY KEY`     | Unique identifier for the user.      |
+| `name`            | `VARCHAR(255)` | User's name.                                   |
+| `age`             | `INTEGER`    | User's age.                                     |
+| `weight_kg`       | `DECIMAL(4,1)` | User's weight in kilograms.                    |
+| `height_cm`       | `DECIMAL(4,1)` | User's height in centimeters.                  |
+| `gender`          | `VARCHAR(50)` | User's gender.                                  |
+| `calorie_goal`    | `INTEGER`    | Daily calorie goal for the user.                |
+| `carbs_goal`      | `INTEGER`    | Daily carbohydrate goal for the user.           |
+| `protein_goal`    | `INTEGER`    | Daily protein goal for the user.                |
+| `fat_goal`        | `INTEGER`    | Daily fat goal for the user.                    |
+
+#### `staging.fact_activity_log`
+| Column Name       | Data Type     | Description                                      |
+|-------------------|--------------|--------------------------------------------------|
+| `activity_id`     | `BIGINT PRIMARY KEY`     | Unique identifier for the activity record. |
+| `user_id`         | `BIGINT`     | Unique identifier for the user.                 |
+| `timestamp`       | `TIMESTAMP`  | Timestamp of the activity.                      |
+| `activity_type`   | `VARCHAR(100)` | Type of activity (e.g., walking, running).     |
+| `steps`           | `INTEGER`    | Number of steps taken during the activity.      |
+| `heart_rate`      | `INTEGER`    | Heart rate during the activity.                 |
+| `calories_burned` | `INTEGER`    | Calories burned during the activity.            |
+
+#### `staging.fact_sleep_log`
+| Column Name       | Data Type     | Description                                      |
+|-------------------|--------------|--------------------------------------------------|
+| `sleep_id`        | `BIGINT PRIMARY KEY`     | Unique identifier for the sleep record. |
+| `user_id`         | `BIGINT`     | Unique identifier for the user.                 |
+| `date`            | `DATE`       | Date of the sleep record.                       |
+| `sleep_start`     | `TIMESTAMP`  | Start time of sleep.                            |
+| `sleep_end`       | `TIMESTAMP`  | End time of sleep.                              |
+| `sleep_duration_hours` | `DECIMAL(5,1)` | Duration of sleep in hours.                  |
+| `sleep_quality_score` | `INTEGER` | Quality score of sleep.                         |
+
+#### `staging.fact_nutrition_log`
+| Column Name       | Data Type     | Description                                      |
+|-------------------|--------------|--------------------------------------------------|
+| `nutrition_id`    | `BIGINT PRIMARY KEY`     | Unique identifier for the nutrition record. |
+| `user_id`         | `BIGINT`     | Unique identifier for the user.                 |
+| `date`            | `DATE`       | Date of the nutrition log.                      |
+| `food_item`       | `VARCHAR(255)` | Name of the food item.                         |
+| `meal_type`       | `VARCHAR(100)` | Type of meal (e.g., breakfast, lunch).         |
+| `calories_per_100g` | `DECIMAL(4,0)` | Calories per 100 grams of the food item.     |
+| `carbs_per_100g`  | `DECIMAL(3,0)` | Carbohydrates per 100 grams of the food item. |
+| `protein_per_100g` | `DECIMAL(3,0)` | Protein per 100 grams of the food item.       |
+| `fat_per_100g`    | `DECIMAL(3,0)` | Fat per 100 grams of the food item.           |
+
+#### `staging.fact_goals_log`
+| Column Name       | Data Type     | Description                                      |
+|-------------------|--------------|--------------------------------------------------|
+| `goal_id`         | `BIGINT PRIMARY KEY`     | Unique identifier for the goal record.|
+| `user_id`         | `BIGINT`     | Unique identifier for the user.                 |
+| `date`            | `DATE`       | Date of the goal record.                        |
+| `goal_type`       | `VARCHAR(100)` | Type of goal (e.g., calories burned, steps taken). |
+| `target_value`    | `INTEGER`    | Target value for the goal.                      |
+| `actual_value`    | `INTEGER`    | Actual value achieved for the goal.             |
+| `status`          | `VARCHAR(50)` | Status of the goal (e.g., achieved, not achieved). |
+
+--- 
 
 #### Trusted Schema
 - **Purpose**: Stores the final, fully processed data that is ready for analytics and reporting.  
 - **Tables**:  
-  - `trusted.user_profile`  
-  - `trusted.activity_summary`  
-  - `trusted.sleep_summary`  
-  - `trusted.nutrition_summary`  
-  - `trusted.goal_adherence`  
