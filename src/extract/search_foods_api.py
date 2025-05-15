@@ -5,6 +5,7 @@ import csv
 
 load_dotenv()
 
+
 def fetch_food_nutrition(food_item):
     """get nutritional data for a food item using the USDA API."""
     USDA_API_KEY = os.getenv('USDA_API_KEY')

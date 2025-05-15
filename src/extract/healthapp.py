@@ -8,6 +8,9 @@ from dotenv import load_dotenv
 from search_foods_api import fetch_food_nutrition
 from load_data_from_csv import load_food_items_from_csv, load_activity_types_from_csv
 
+# global variables
+NO_DAYS = 2  
+NO_USERS = 2  
 
 class DatabaseManager:
     def __init__(self):
@@ -47,7 +50,7 @@ class DatabaseManager:
 
 
 class UserProfileGenerator:
-    def __init__(self, num_users=2):
+    def __init__(self, num_users=NO_USERS):  
         self.num_users = num_users
         self.fake = Faker()
 
@@ -75,7 +78,7 @@ class UserProfileGenerator:
 
 
 class DataInserter:
-    def __init__(self, conn, days=2):
+    def __init__(self, conn, days=NO_DAYS):  
         self.conn = conn
         self.days = days
 

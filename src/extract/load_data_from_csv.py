@@ -2,9 +2,10 @@ import csv
 import os
 import requests
 
-# get directory of current script
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_DIR, '..', 'data')  # adjust path to 'data' folder
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__)) # get directory of current script
+DATA_DIR = os.path.join(BASE_DIR, '..', 'data')  # go to 'data' folder
+
 
 def load_food_items_from_csv(file_name):
     """Load food items from a CSV file."""
