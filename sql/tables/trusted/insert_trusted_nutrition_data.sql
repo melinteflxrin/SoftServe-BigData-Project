@@ -17,4 +17,5 @@ SELECT
     dfi.fat_per_100g
 FROM staging.fact_nutrition_log fnl
 JOIN staging.dim_user_profile dup ON fnl.user_id = dup.user_id
-JOIN staging.dim_food_item dfi ON fnl.food_item_id = dfi.food_item_id;
+JOIN staging.dim_food_item dfi ON fnl.food_item_id = dfi.food_item_id
+ON CONFLICT (nutrition_id) DO NOTHING;

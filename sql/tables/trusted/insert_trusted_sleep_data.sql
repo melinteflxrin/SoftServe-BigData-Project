@@ -14,4 +14,5 @@ SELECT
     fsl.sleep_duration_hours,
     fsl.sleep_quality_score
 FROM staging.fact_sleep_log fsl
-JOIN staging.dim_user_profile dup ON fsl.user_id = dup.user_id;
+JOIN staging.dim_user_profile dup ON fsl.user_id = dup.user_id
+ON CONFLICT (sleep_id) DO NOTHING;

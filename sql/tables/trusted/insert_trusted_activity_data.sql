@@ -14,4 +14,5 @@ SELECT
     fal.heart_rate,
     fal.calories_burned
 FROM staging.fact_activity_log fal
-JOIN staging.dim_user_profile dup ON fal.user_id = dup.user_id;
+JOIN staging.dim_user_profile dup ON fal.user_id = dup.user_id
+ON CONFLICT (activity_id) DO NOTHING;

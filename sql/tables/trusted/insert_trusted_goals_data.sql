@@ -14,4 +14,5 @@ SELECT
     fgl.actual_value,
     fgl.status
 FROM staging.fact_goals_log fgl
-JOIN staging.dim_user_profile dup ON fgl.user_id = dup.user_id;
+JOIN staging.dim_user_profile dup ON fgl.user_id = dup.user_id
+ON CONFLICT (goal_id) DO NOTHING;

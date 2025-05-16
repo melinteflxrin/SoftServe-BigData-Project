@@ -3,9 +3,10 @@ from dotenv import load_dotenv
 import os
 
 class TrustedDataLoader:
-    """Handle creation and population of trusted layer tables."""
+    """handle creation and population of trusted layer tables."""
 
     def __init__(self):
+        """initialize the TrustedDataLoader with database configuration."""
         load_dotenv()
         self.db_config = {
             'dbname': os.getenv('DB_NAME', 'health_fitness_db'),
@@ -17,25 +18,29 @@ class TrustedDataLoader:
         self.conn = None
 
     def connect_db(self):
+        """establish connection to database."""
         self.conn = psycopg2.connect(**self.db_config)
 
     def close_db(self):
+        """close database connection if it exists."""
         if self.conn:
             self.conn.close()
 
     @staticmethod
     def load_sql(file_path):
+        """load SQL query from a file."""
         with open(file_path, 'r') as file:
             return file.read()
 
     def execute_sql(self, sql_file):
+        """execute SQL statement from a file."""
         sql = self.load_sql(sql_file)
         with self.conn.cursor() as crs:
             crs.execute(sql)
             print(f"Executed SQL from {sql_file}")
 
     def create_trusted_tables(self):
-        """Create all trusted tables."""
+        """create all trusted tables."""
         try:
             print("Ensuring trusted tables exist...")
             base_path = os.path.join(os.path.dirname(__file__), '../../sql/tables/trusted/')
@@ -51,7 +56,7 @@ class TrustedDataLoader:
             raise
 
     def insert_trusted_data(self):
-        """Insert data into trusted tables."""
+        """insert data into trusted tables."""
         try:
             print("Loading data into trusted tables...")
             base_path = os.path.join(os.path.dirname(__file__), '../../sql/tables/trusted/')
@@ -67,7 +72,7 @@ class TrustedDataLoader:
             raise
 
     def run_trusted_load(self):
-        """Run the full trusted layer load process."""
+        """run the full trusted layer load process."""
         try:
             self.connect_db()
             self.create_trusted_tables()
