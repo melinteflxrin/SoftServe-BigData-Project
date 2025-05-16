@@ -23,7 +23,7 @@ class DatabaseTransformer:
         self.conn = psycopg2.connect(**self.db_config)
 
     def close_db(self):
-         """close database connection."""
+        """close database connection."""
         if self.conn:
             self.conn.close()
 
@@ -46,6 +46,7 @@ class DatabaseTransformer:
             print("Ensuring tables exist...")
             base_path = os.path.join(os.path.dirname(__file__), '../../sql/tables/staging/')
             self.execute_sql(os.path.join(base_path, 'create_dim_user_profile_table.sql'))
+            self.execute_sql(os.path.join(base_path, 'create_dim_food_item_table.sql'))
             self.execute_sql(os.path.join(base_path, 'create_fact_activity_log_table.sql'))
             self.execute_sql(os.path.join(base_path, 'create_fact_sleep_log_table.sql'))
             self.execute_sql(os.path.join(base_path, 'create_fact_nutrition_log_table.sql'))
@@ -56,15 +57,15 @@ class DatabaseTransformer:
             self.conn.rollback()
             print(f"Error during table creation: {e}")
             raise
-
+    
     def insert_data(self):
-        """insert transformed data into the database tables."""
         try:
             print("Transforming data...")
             base_path = os.path.join(os.path.dirname(__file__), '../../sql/tables/staging/')
             self.execute_sql(os.path.join(base_path, 'insert_dim_user_profile.sql'))
             self.execute_sql(os.path.join(base_path, 'insert_fact_activity_log.sql'))
             self.execute_sql(os.path.join(base_path, 'insert_fact_sleep_log.sql'))
+            self.execute_sql(os.path.join(base_path, 'insert_dim_food_item.sql'))
             self.execute_sql(os.path.join(base_path, 'insert_fact_nutrition_log.sql'))
             self.execute_sql(os.path.join(base_path, 'insert_fact_goals_log.sql'))
             self.conn.commit()
@@ -75,7 +76,7 @@ class DatabaseTransformer:
             raise
 
     def run_transformations(self):
-         """run the full transformation process: creating tables and inserting data."""
+        """run the full transformation process: creating tables and inserting data."""
         try:
             self.connect_db()
             self.create_tables()
