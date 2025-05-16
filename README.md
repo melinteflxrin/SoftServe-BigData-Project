@@ -78,7 +78,7 @@ This script automatically creates and visualizes dashboards for your key health 
 <details>
 <summary id="dashboard-example-output">Dashboard Example Output</summary>
 
-![Dashboard Example](image.png)  
+![Dashboard Example](assets/dashboard-example-screenshot.png)  
 *Dashboard example shown for 10 generated users across 7 days*
 
 </details>
