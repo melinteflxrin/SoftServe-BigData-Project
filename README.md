@@ -4,6 +4,7 @@
 1. [Scenario](#1-scenario)
 2. [Business Requirements & Goals](#2-business-requirements--goals)
 3. [Reports, Dashboards & KPIs](#3-reports-dashboards--kpis)
+    - [Dashboard Example Output](#dashboard-example-output)
 4. [Data Warehouse Design, Tables & Sources](#4-data-warehouse-design-tables--sources)<br>
    4.1 [APIs and Data Sources](#41-apis-and-data-sources)<br>
    4.2 [ETL Process](#42-etl-process)<br>
@@ -11,6 +12,8 @@
       - [Raw Schema](#raw-schema)<br>
       - [Staging Schema](#staging-schema)<br>
       - [Trusted Schema](#trusted-schema)<br>
+5. [Database Administration & Data Governance](#5-database-administration--data-governance)
+    - [Create DBA Roles](#create-dba-roles)<br>
 
 ---
 
@@ -73,7 +76,7 @@ This script automatically creates and visualizes dashboards for your key health 
   - Displayed together for easy comparison
 
 <details>
-<summary>Example Dashboard Output</summary>
+<summary id="dashboard-example-output">Dashboard Example Output</summary>
 
 ![Dashboard Example](image.png)  
 *Dashboard example shown for 10 generated users across 7 days*
@@ -296,3 +299,20 @@ The data warehouse is organized into three schemas: **raw**, **staging**, and **
 
 --- 
 
+## 5. Database Administration & Data Governance
+
+### 5.1 Database Administration
+
+- **Create DBA Roles:** <span id="create-dba-roles"></span>
+  - To create the `db_role` and grant access to the `trusted` schema and its views, use the SQL scripts provided in [`sql/roles/`](sql/roles/):
+    - [`grant_usage_trusted_schema.sql`](sql/roles/grant_usage_trusted_schema.sql)
+    - [`grant_select_trusted_views.sql`](sql/roles/grant_select_trusted_views.sql)
+
+- **Optimize DB Performance:**  
+  - To check and optimize query execution performance, use the SQL code from [`sql/roles/explain_query_execution.sql`](sql/roles/explain_query_execution.sql).
+
+
+### 5.2 Data Governance
+
+
+---
