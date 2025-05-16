@@ -52,13 +52,18 @@ It tracks activity, sleep, and nutrition data, providing real-time insights and 
 - **Progress Tracker**: Goal streak, weight trends, daily health score 
 
 ### KPIs  
-- % of users hitting daily calorie goals  
-- Average macronutrient distribution per user  
-- % of users achieving weekly fitness targets  
-- Daily average calories burned  
-- Number of consecutive days with goal adherence  
-- Weekly goal adherence rate (activity, nutrition, sleep)  
-- Most commonly exceeded macros (e.g., too much fat or sugar)
+- **% of users who have achieved their goals**  
+  - [`trusted.vw_pct_users_achieved_goals`](sql/business_view/create_view_pct_users_achieved_goals.sql):  
+    Calculates the percentage of user goals (across all goal types) that have been achieved.
+- **User's favourite food and typical meal time**  
+  - [`trusted.vw_user_favourite_food`](sql/business_view/create_view_user_favourite_food.sql):  
+    Shows each user's most frequently consumed food and the meal time they usually eat it.
+- **Daily average calories burned per user**  
+  - [`trusted.vw_user_daily_avg_calories_burned`](sql/business_view/create_view_avg_calories_burned.sql):  
+    Reports the average number of calories burned per user per day.
+- **Average macronutrient distribution per user**  
+  - [`trusted.vw_user_avg_macros`](sql/business_view/create_view_user_avg_macros.sql):  
+    Displays the average intake of calories, carbs, protein, and fat per user.
 
 ---
 
@@ -273,3 +278,6 @@ The data warehouse is organized into three schemas: **raw**, **staging**, and **
 | `target_value`      | `INT`           | Target value for the goal.                       |
 | `actual_value`      | `INT`           | Actual value achieved for the goal.              |
 | `status`            | `VARCHAR(50)`   | Status of the goal (e.g., achieved, not achieved).|
+
+--- 
+
