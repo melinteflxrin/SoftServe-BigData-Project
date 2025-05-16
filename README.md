@@ -45,25 +45,36 @@ It tracks activity, sleep, and nutrition data, providing real-time insights and 
 - Weekly goal adherence (% of goals met)  
 - Weight and BMI trends  
 
-### Dashboards  
-- **Nutrition**: Caloric intake vs goal, macro distribution, top calorie foods  
-- **Activity**: Steps, heart rate, calories burned, active vs sedentary time  
-- **Sleep**: Sleep quality, total hours, start/end times  
-- **Progress Tracker**: Goal streak, weight trends, daily health score 
+### Dashboards & KPIs
 
-### KPIs  
-- **% of users who have achieved their goals**  
-  - [`trusted.vw_pct_users_achieved_goals`](sql/business_view/create_view_pct_users_achieved_goals.sql):  
-    Calculates the percentage of user goals (across all goal types) that have been achieved.
-- **User's favourite food and typical meal time**  
-  - [`trusted.vw_user_favourite_food`](sql/business_view/create_view_user_favourite_food.sql):  
-    Shows each user's most frequently consumed food and the meal time they usually eat it.
-- **Daily average calories burned per user**  
-  - [`trusted.vw_user_daily_avg_calories_burned`](sql/business_view/create_view_avg_calories_burned.sql):  
-    Reports the average number of calories burned per user per day.
-- **Average macronutrient distribution per user**  
-  - [`trusted.vw_user_avg_macros`](sql/business_view/create_view_user_avg_macros.sql):  
-    Displays the average intake of calories, carbs, protein, and fat per user.
+You can generate interactive dashboards by running the provided script:  
+```bash
+python src/dashboard/dashboard.py
+```
+This script automatically creates and visualizes dashboards for your key health and fitness metrics using the [trusted views](sql/business_view/).
+
+**Dashboards and KPIs included:**
+
+- **Goal Achievement:**  
+  - % of users who have achieved their goals  
+    - [`trusted.vw_pct_users_achieved_goals`](sql/business_view/create_view_pct_users_achieved_goals.sql): Calculates the percentage of user goals (across all goal types) that have been achieved.
+
+- **Nutrition:**  
+  - User's favourite food and typical meal time  
+    - [`trusted.vw_user_favourite_food`](sql/business_view/create_view_user_favourite_food.sql): Shows each user's most frequently consumed food and the meal time they usually eat it.
+  - Average macronutrient distribution per user  
+    - [`trusted.vw_user_avg_macros`](sql/business_view/create_view_user_avg_macros.sql): Displays the average intake of calories, carbs, protein, and fat per user.
+
+- **Activity:**  
+  - Daily average calories burned per user  
+    - [`trusted.vw_user_daily_avg_calories_burned`](sql/business_view/create_view_avg_calories_burned.sql): Reports the average number of calories burned per user per day.
+
+- **All dashboards:**  
+  - Displayed together for easy comparison
+
+> **Example Dashboard Output:**  
+> ![Dashboard Example](assets/dashboard_example.png)<br>
+> *Dashboard example shown for 10 generated users across 7 days*
 
 ---
 
