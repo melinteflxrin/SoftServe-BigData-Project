@@ -159,6 +159,16 @@ The data warehouse is organized into three schemas: **raw**, **staging**, and **
 | `protein_goal`    | `INTEGER`    | Daily protein goal for the user.                |
 | `fat_goal`        | `INTEGER`    | Daily fat goal for the user.                    |
 
+#### `staging.dim_food_item`
+| Column Name       | Data Type     | Description                                      |
+|-------------------|--------------|--------------------------------------------------|
+| `food_item_id`    | `BIGINT PRIMARY KEY`     | Unique identifier for the food item.        |
+| `food_item`       | `VARCHAR(255)` | Name of the food item.                         |
+| `calories_per_100g` | `DECIMAL(4,0)` | Calories per 100 grams of the food item.     |
+| `carbs_per_100g`  | `DECIMAL(3,0)` | Carbohydrates per 100 grams of the food item. |
+| `protein_per_100g` | `DECIMAL(3,0)` | Protein per 100 grams of the food item.       |
+| `fat_per_100g`    | `DECIMAL(3,0)` | Fat per 100 grams of the food item.           |
+
 #### `staging.fact_activity_log`
 | Column Name       | Data Type     | Description                                      |
 |-------------------|--------------|--------------------------------------------------|
@@ -187,12 +197,8 @@ The data warehouse is organized into three schemas: **raw**, **staging**, and **
 | `nutrition_id`    | `BIGINT PRIMARY KEY`     | Unique identifier for the nutrition record. |
 | `user_id`         | `BIGINT`     | Unique identifier for the user.                 |
 | `date`            | `DATE`       | Date of the nutrition log.                      |
-| `food_item`       | `VARCHAR(255)` | Name of the food item.                         |
+| `food_item_id`    | `BIGINT`     | Foreign key to the food item dimension.         |
 | `meal_type`       | `VARCHAR(100)` | Type of meal (e.g., breakfast, lunch).         |
-| `calories_per_100g` | `DECIMAL(4,0)` | Calories per 100 grams of the food item.     |
-| `carbs_per_100g`  | `DECIMAL(3,0)` | Carbohydrates per 100 grams of the food item. |
-| `protein_per_100g` | `DECIMAL(3,0)` | Protein per 100 grams of the food item.       |
-| `fat_per_100g`    | `DECIMAL(3,0)` | Fat per 100 grams of the food item.           |
 
 #### `staging.fact_goals_log`
 | Column Name       | Data Type     | Description                                      |
@@ -209,4 +215,61 @@ The data warehouse is organized into three schemas: **raw**, **staging**, and **
 
 #### Trusted Schema
 - **Purpose**: Stores the final, fully processed data that is ready for analytics and reporting.  
-- **Tables**:  
+
+#### `trusted.nutrition_data`
+| Column Name         | Data Type        | Description                                      |
+|---------------------|-----------------|--------------------------------------------------|
+| `nutrition_id`      | `BIGINT PRIMARY KEY` | Unique identifier for the nutrition record. |
+| `user_id`           | `BIGINT`        | Unique identifier for the user.                  |
+| `user_name`         | `VARCHAR(255)`  | User's name.                                     |
+| `age`               | `INT`           | User's age.                                      |
+| `gender`            | `VARCHAR(50)`   | User's gender.                                   |
+| `date`              | `DATE`          | Date of the nutrition log.                       |
+| `food_item`         | `VARCHAR(255)`  | Name of the food item.                           |
+| `meal_type`         | `VARCHAR(100)`  | Type of meal (e.g., breakfast, lunch).           |
+| `calories_per_100g` | `DECIMAL(4,0)`  | Calories per 100 grams of the food item.         |
+| `carbs_per_100g`    | `DECIMAL(3,0)`  | Carbohydrates per 100 grams of the food item.    |
+| `protein_per_100g`  | `DECIMAL(3,0)`  | Protein per 100 grams of the food item.          |
+| `fat_per_100g`      | `DECIMAL(3,0)`  | Fat per 100 grams of the food item.              |
+
+#### `trusted.activity_data`
+| Column Name         | Data Type        | Description                                      |
+|---------------------|-----------------|--------------------------------------------------|
+| `activity_id`       | `BIGINT PRIMARY KEY` | Unique identifier for the activity record.   |
+| `user_id`           | `BIGINT`        | Unique identifier for the user.                  |
+| `user_name`         | `VARCHAR(255)`  | User's name.                                     |
+| `age`               | `INT`           | User's age.                                      |
+| `gender`            | `VARCHAR(50)`   | User's gender.                                   |
+| `timestamp`         | `TIMESTAMP`     | Timestamp of the activity.                       |
+| `activity_type`     | `VARCHAR(100)`  | Type of activity (e.g., walking, running).       |
+| `steps`             | `INT`           | Number of steps taken during the activity.       |
+| `heart_rate`        | `INT`           | Heart rate during the activity.                  |
+| `calories_burned`   | `INT`           | Calories burned during the activity.             |
+
+#### `trusted.sleep_data`
+| Column Name             | Data Type        | Description                                      |
+|-------------------------|-----------------|--------------------------------------------------|
+| `sleep_id`              | `BIGINT PRIMARY KEY` | Unique identifier for the sleep record.      |
+| `user_id`               | `BIGINT`        | Unique identifier for the user.                  |
+| `user_name`             | `VARCHAR(255)`  | User's name.                                     |
+| `age`                   | `INT`           | User's age.                                      |
+| `gender`                | `VARCHAR(50)`   | User's gender.                                   |
+| `date`                  | `DATE`          | Date of the sleep record.                        |
+| `sleep_start`           | `TIMESTAMP`     | Start time of sleep.                             |
+| `sleep_end`             | `TIMESTAMP`     | End time of sleep.                               |
+| `sleep_duration_hours`  | `DECIMAL(5,1)`  | Duration of sleep in hours.                      |
+| `sleep_quality_score`   | `INTEGER`       | Quality score of sleep.                          |
+
+#### `trusted.goals_data`
+| Column Name         | Data Type        | Description                                      |
+|---------------------|-----------------|--------------------------------------------------|
+| `goal_id`           | `BIGINT PRIMARY KEY` | Unique identifier for the goal record.        |
+| `user_id`           | `BIGINT`        | Unique identifier for the user.                  |
+| `user_name`         | `VARCHAR(255)`  | User's name.                                     |
+| `age`               | `INT`           | User's age.                                      |
+| `gender`            | `VARCHAR(50)`   | User's gender.                                   |
+| `date`              | `DATE`          | Date of the goal record.                         |
+| `goal_type`         | `VARCHAR(100)`  | Type of goal (e.g., calories burned, steps).     |
+| `target_value`      | `INT`           | Target value for the goal.                       |
+| `actual_value`      | `INT`           | Actual value achieved for the goal.              |
+| `status`            | `VARCHAR(50)`   | Status of the goal (e.g., achieved, not achieved).|
