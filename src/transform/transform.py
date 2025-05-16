@@ -59,6 +59,7 @@ class DatabaseTransformer:
             raise
     
     def insert_data(self):
+        """insert data into the tables."""
         try:
             print("Transforming data...")
             base_path = os.path.join(os.path.dirname(__file__), '../../sql/tables/staging/')
