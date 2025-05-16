@@ -9,8 +9,8 @@ from search_foods_api import fetch_food_nutrition
 from load_data_from_csv import load_food_items_from_csv, load_activity_types_from_csv
 
 # global variables
-NO_DAYS = 2  
-NO_USERS = 2  
+NO_DAYS = 7  
+NO_USERS = 10  
 
 class DatabaseManager:
     """manages database connection and schema/table creation."""
@@ -37,21 +37,21 @@ class DatabaseManager:
             return file.read()
 
     def execute_sql(self, conn, sql_file):
-         """execute SQL from a file."""
+        """execute SQL from a file."""
         sql = self.load_sql(sql_file)
         with conn.cursor() as crs:
             crs.execute(sql)
             print(f"Executed SQL from {sql_file}")
 
     def ensure_schemas_exist(self, conn):
-         """ensure required schemas exist in the database."""
+        """ensure required schemas exist in the database."""
         base_path = os.path.join(os.path.dirname(__file__), '../../sql/schemas/')
         self.execute_sql(conn, os.path.join(base_path, 'create_raw_schema.sql'))
         self.execute_sql(conn, os.path.join(base_path, 'create_staging_schema.sql'))
         self.execute_sql(conn, os.path.join(base_path, 'create_trusted_schema.sql'))
 
     def ensure_tables_exist(self, conn):
-         """ensure required tables exist in the database."""
+        """ensure required tables exist in the database."""
         base_path = os.path.join(os.path.dirname(__file__), '../../sql/tables/raw/')
         self.execute_sql(conn, os.path.join(base_path, 'create_raw_user_data_table.sql'))
         self.execute_sql(conn, os.path.join(base_path, 'create_raw_nutrition_log_table.sql'))
@@ -67,7 +67,7 @@ class UserProfileGenerator:
         self.fake = Faker()
 
     def generate_user_profile(self, user_id=None):
-         """generate a single user profile."""
+        """generate a single user profile."""
         if user_id is None:
             user_id = random.randint(1, 1000000)
 
@@ -92,7 +92,7 @@ class UserProfileGenerator:
 
 
 class DataInserter:
-     """handle the insertion of data into the database."""
+    """handle the insertion of data into the database."""
 
     def __init__(self, conn, days=NO_DAYS):  
         self.conn = conn

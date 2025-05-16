@@ -1,0 +1,1 @@
+SELECT * FROM trusted.vw_user_avg_macros;

@@ -1,0 +1,1 @@
+SELECT * FROM trusted.vw_user_daily_avg_calories_burned;
