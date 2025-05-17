@@ -485,6 +485,7 @@ When you click **"Run Pipeline"**, the GUI passes your input as command-line arg
 **Important:**  
 - If you use the GUI, your input for number of users and days will be used for that run.
 - If you run the extract script directly (e.g., `python src/extract/healthapp.py`), it will use the default global variables (`NO_USERS` and `NO_DAYS`) defined in the script.
+- **Note:** For larger numbers of users or days, the pipeline will take longer to complete. This is because the USDA API is called to retrieve food information for every user and day, which can be time-consuming.
 
 **Example GUI window:**  
 <details>
