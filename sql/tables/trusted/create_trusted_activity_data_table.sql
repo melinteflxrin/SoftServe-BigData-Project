@@ -1,9 +1,6 @@
 CREATE TABLE IF NOT EXISTS trusted.activity_data (
     activity_id BIGINT PRIMARY KEY,
-    user_id BIGINT NOT NULL,
-    user_name VARCHAR(255) NOT NULL,
-    age INT NOT NULL CHECK (age > 0),
-    gender VARCHAR(50) NOT NULL CHECK (gender IN ('male', 'female', 'other')),
+    user_id BIGINT NOT NULL REFERENCES trusted.user_profile(user_id),
     timestamp TIMESTAMP NOT NULL,
     activity_type VARCHAR(100) NOT NULL,
     steps INT NOT NULL CHECK (steps >= 0),

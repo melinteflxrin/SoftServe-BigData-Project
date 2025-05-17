@@ -44,6 +44,7 @@ class TrustedDataLoader:
         try:
             print("Ensuring trusted tables exist...")
             base_path = os.path.join(os.path.dirname(__file__), '../../sql/tables/trusted/')
+            self.execute_sql(os.path.join(base_path, 'create_trusted_user_profile_table.sql'))
             self.execute_sql(os.path.join(base_path, 'create_trusted_nutrition_data_table.sql'))
             self.execute_sql(os.path.join(base_path, 'create_trusted_sleep_data_table.sql'))
             self.execute_sql(os.path.join(base_path, 'create_trusted_activity_data_table.sql'))
@@ -60,6 +61,7 @@ class TrustedDataLoader:
         try:
             print("Loading data into trusted tables...")
             base_path = os.path.join(os.path.dirname(__file__), '../../sql/tables/trusted/')
+            self.execute_sql(os.path.join(base_path, 'insert_trusted_user_profile.sql'))
             self.execute_sql(os.path.join(base_path, 'insert_trusted_nutrition_data.sql'))
             self.execute_sql(os.path.join(base_path, 'insert_trusted_sleep_data.sql'))
             self.execute_sql(os.path.join(base_path, 'insert_trusted_activity_data.sql'))
