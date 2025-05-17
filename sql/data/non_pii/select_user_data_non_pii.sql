@@ -1,0 +1,1 @@
+SELECT * FROM trusted.user_data_non_pii LIMIT 10;
