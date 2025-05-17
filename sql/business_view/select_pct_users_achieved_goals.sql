@@ -1,0 +1,1 @@
+SELECT * FROM trusted.vw_pct_users_achieved_goals;

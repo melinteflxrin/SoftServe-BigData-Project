@@ -1,1 +1,1 @@
-GRANT USAGE ON SCHEMA trusted TO de_role;
+GRANT USAGE ON SCHEMA trusted TO dba_role;
