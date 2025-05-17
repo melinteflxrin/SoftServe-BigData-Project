@@ -1,11 +1,9 @@
 # Data Warehousing Project:<br/> Health, Fitness & Nutrition Analytics
 
 This project is a comprehensive data warehousing solution designed for a hypothetical health-tech startup.<br>
- It demonstrates best practices in ETL, data governance, privacy, and analytics with interactive dashboards and role-based access control.
+It demonstrates best practices in ETL, data governance, privacy, and analytics with interactive dashboards and role-based access control.
 
-## Table of contents
-1. [Description](#1-description)
-...
+---
 
 ## Table of contents
 1. [Description](#1-description)
