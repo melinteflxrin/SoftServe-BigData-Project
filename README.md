@@ -37,15 +37,15 @@ The project demonstrates how to:
 ## 2. Business Requirements & Goals
 
 ### Business Requirements 
-- Provide health analytics for users (nutrition,fitness,sleep).  
-- Help users track progress toward personal goals.  
-- Offer predictive insights into calorie balance and fitness level trends.  
+- Integrate and process user health data (activity, sleep, nutrition) from multiple sources.
+- Ensure data privacy by separating and protecting PII and non-PII data.
+- Maintain high data quality and secure, role-based access.
+- Support analytics and reporting with trusted, well-structured data.
 
 ### Core Business Goals 
-- **Activity Monitoring** – Collect and visualize daily activity metrics (steps, heart rate, calories burned).  
-- **Sleep Insights** – Track sleep duration and quality.  
-- **Nutrition Tracking** – Monitor daily caloric intake and macro goals.  
-- **Goal Adherence** – Analyze user behavior around set goals.  
+- Provide actionable insights on user health and goal achievement.
+- Demonstrate best practices in data governance and lifecycle management.
+- Enable interactive dashboards and KPIs for key health metrics.
 
 ---
 
