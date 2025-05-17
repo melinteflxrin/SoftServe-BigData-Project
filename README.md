@@ -1,5 +1,12 @@
 # Data Warehousing Project:<br/> Health, Fitness & Nutrition Analytics
 
+This project is a comprehensive data warehousing solution designed for a hypothetical health-tech startup.<br>
+ It demonstrates best practices in ETL, data governance, privacy, and analytics with interactive dashboards and role-based access control.
+
+## Table of contents
+1. [Description](#1-description)
+...
+
 ## Table of contents
 1. [Description](#1-description)
 2. [Business Requirements & Goals](#2-business-requirements--goals)
@@ -20,7 +27,7 @@
 
 ## 1. Description
 
-This project is a comprehensive data warehousing solution designed for a hypothetical health-tech startup. The scenario centers on a mobile application that helps users monitor their health and wellness by tracking activity, sleep, and nutrition data.
+This repository showcases an end-to-end data warehouse solution designed for a fictional health-tech startup. The scenario centers on a mobile application that helps users monitor their health and wellness by tracking activity, sleep, and nutrition data.
 
 The project demonstrates how to:
 - Integrate and process data from multiple sources (including synthetic data and public APIs).
