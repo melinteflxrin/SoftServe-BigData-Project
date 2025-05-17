@@ -102,13 +102,13 @@ This script ([`src/dashboard/dashboard.py`](src/dashboard/dashboard.py)) automat
 
 ### 4.1 APIs and Data Sources
 
-- **HealthApp**: Synthetic data is generated using the `healthapp.py` script.  
+- **HealthApp**: Synthetic data is generated using the [`healthapp.py`](src/extract/healthapp.py) script.  
   - To generate raw data, run the following command:
     ```bash
     python src/extract/healthapp.py
     ```
-  - This script creates the necessary schemas and tables in the `raw` schema (if they do not already exist) and populates them with data for user profiles, activity logs, sleep logs, nutrition logs, and goals logs.  
-- [**USDA API**](https://www.ers.usda.gov/developer/data-apis/): Nutritional data for food items is fetched dynamically via API calls within the `healthapp.py` script.  
+  - This script creates the necessary schemas and tables in the `raw` schema (if they do not already exist) and populates them with raw user data (see [`raw.user_data`](#rawuserdata)), for activity, sleep, nutrition, and goals.  
+- [**USDA API**](https://www.ers.usda.gov/developer/data-apis/): Nutritional data for food items is fetched dynamically via API calls within the [`healthapp.py`](src/extract/healthapp.py) script.  
 
 ---
 
