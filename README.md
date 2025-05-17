@@ -1,7 +1,7 @@
 # Data Warehousing Project:<br/> Health, Fitness & Nutrition Analytics
 
 ## Table of contents
-1. [Scenario](#1-scenario)
+1. [Description](#1-description)
 2. [Business Requirements & Goals](#2-business-requirements--goals)
 3. [Reports, Dashboards & KPIs](#3-reports-dashboards--kpis)
     - [Dashboard Example Output](#dashboard-example-output)
@@ -13,14 +13,24 @@
       - [Staging Schema](#staging-schema)<br>
       - [Trusted Schema](#trusted-schema)<br>
 5. [Database Administration & Data Governance](#5-database-administration--data-governance)
-    - [Create DBA Roles](#create-dba-roles)<br>
+    - [5.1 Database Administration](#51-database-administration)<br>
+    - [5.2 Data Governance](#52-data-governance)<br>
 
 ---
 
-## 1. Scenario
+## 1. Description
 
-You are a data engineer at a health-tech startup that develops a mobile app to monitor user health.<br>
-It tracks activity, sleep, and nutrition data, providing real-time insights and analytics over time.
+This project is a comprehensive data warehousing solution designed for a hypothetical health-tech startup. The scenario centers on a mobile application that helps users monitor their health and wellness by tracking activity, sleep, and nutrition data.
+
+The project demonstrates how to:
+- Integrate and process data from multiple sources (including synthetic data and public APIs).
+- Implement robust ETL pipelines for cleaning, validating, and transforming raw data into analytics-ready tables.
+- Enforce strong data governance, privacy, and security practices, including the separation of PII and non-PII data.
+- Provide interactive dashboards and key performance indicators (KPIs) for user activity, sleep, nutrition, and goal achievement.
+- Apply role-based access control to protect sensitive data.
+
+> **Note:**  
+> This project is for educational and demonstration purposes only. The app and its data are entirely fictional and intended to showcase best practices in data engineering, warehousing, and analytics.
 
 ---
 
@@ -40,15 +50,6 @@ It tracks activity, sleep, and nutrition data, providing real-time insights and 
 ---
 
 ## 3. Reports, Dashboards & KPIs
-
-### Reports  
-- Daily caloric intake vs goal  
-- Macronutrient breakdown (carbs, fat, protein)  
-- Exercise and calorie burn analysis  
-- Weekly goal adherence (% of goals met)  
-- Weight and BMI trends  
-
-### Dashboards & KPIs
 
 You can generate interactive dashboards by running the provided script:  
 ```bash
@@ -303,16 +304,37 @@ The data warehouse is organized into three schemas: **raw**, **staging**, and **
 
 ### 5.1 Database Administration
 
-- **Create DBA Roles:** <span id="create-dba-roles"></span>
-  - To create the `db_role` and grant access to the `trusted` schema and its views, use the SQL scripts provided in [`sql/roles/`](sql/roles/):
+- **Create DBA Roles:**  
+  - Use the scripts in [`sql/roles/`](sql/roles/) to create the `dba_role` and grant access to the `trusted` schema and its views:
     - [`grant_usage_trusted_schema.sql`](sql/roles/grant_usage_trusted_schema.sql)
     - [`grant_select_trusted_views.sql`](sql/roles/grant_select_trusted_views.sql)
-
+    - [`grant_access_pii_data.sql`](sql/roles/grant_access_pii_data.sql) (restricts PII access to DBAs)
+    - [`grant_access_non_pii_data.sql`](sql/roles/grant_access_non_pii_data.sql) (grants analytics access to non-PII data)
+    - [`grant_access_archive_user_data_pii.sql`](sql/roles/grant_access_archive_user_data_pii.sql) (restricts archive access to DBAs)
 - **Optimize DB Performance:**  
-  - To check and optimize query execution performance, use the SQL code from [`sql/roles/explain_query_execution.sql`](sql/roles/explain_query_execution.sql).
+  - Use [`explain_query_execution.sql`](sql/roles/explain_query_execution.sql) to analyze and optimize query performance.
+- **Schema Organization:**  
+  - **Schema Organization:**  
+  - All scripts for table creation, data insertion, archiving, and deletion are organized by data sensitivity in [`sql/data/`](sql/data/).
 
+---
 
 ### 5.2 Data Governance
 
+- **Data Privacy & PII Handling:**
+  - PII data (e.g., user names, ages) is stored only in `trusted.user_data_pii` and managed via scripts in [`sql/data/pii/`](sql/data/pii/).
+  - Non-PII data is stored in `trusted.user_data_non_pii` (see [`sql/data/non_pii/`](sql/data/non_pii/)), where user identifiers are hashed and ages are grouped.
+  - Access to PII tables is strictly limited to users with the `dba_role`.
+- **Data Lifecycle Management:**
+  - Old or inactive records are archived using scripts in [`sql/data/archive/`](sql/data/archive/).
+  - Archived records are deleted from the main tables only after successful archival, ensuring no data loss.
+- **Data Quality Assurance:**
+  - All trusted tables enforce strong data quality constraints (`NOT NULL`, `CHECK`, valid value lists) at the schema level.
+  - ETL scripts filter out incomplete or invalid records before loading into trusted tables.
+- **Security & Access Control:**
+  - Role-based access is enforced at the schema and table level.
+  - PII data is never exposed to analytics or reporting users.
+- **Documentation:**
+  - All scripts and policies are documented in this README for transparency and auditability.
 
 ---
