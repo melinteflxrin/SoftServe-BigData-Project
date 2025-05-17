@@ -21,7 +21,7 @@ It demonstrates best practices in ETL, data governance, privacy, and analytics w
     - [5.1 Database Administration](#51-database-administration)<br>
     - [5.2 Data Governance](#52-data-governance)<br>
 6. [Graphical User Interface (GUI)](#6-graphical-user-interface-gui)
-
+    - [GUI Example](#gui-example)
 ---
 
 ## 1. Description
@@ -488,7 +488,7 @@ When you click **"Run Pipeline"**, the GUI passes your input as command-line arg
 
 **Example GUI window:**  
 <details>
-<summary>Show Example GUI window</summary>
+<summary id="gui-example">Show Example GUI window</summary>
 
 ![GUI Example](assets/gui-example.png)  
 *The GUI for running the ETL pipeline and dashboards with custom parameters.*
