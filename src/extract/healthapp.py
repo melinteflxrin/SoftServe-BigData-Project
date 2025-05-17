@@ -2,6 +2,7 @@ import psycopg2
 import random
 import json
 import os
+import argparse
 from datetime import datetime, timedelta
 from faker import Faker
 from dotenv import load_dotenv
@@ -9,7 +10,7 @@ from search_foods_api import fetch_food_nutrition
 from load_data_from_csv import load_food_items_from_csv, load_activity_types_from_csv
 
 # global variables
-NO_DAYS = 7  
+NO_DAYS = 7 
 NO_USERS = 10  
 
 class DatabaseManager:
@@ -60,7 +61,7 @@ class DatabaseManager:
 class UserProfileGenerator:
     """generates synthetic user profiles."""
 
-    def __init__(self, num_users=NO_USERS):  
+    def __init__(self, num_users):  
         """initialize the UserProfileGenerator with the number of users to generate."""
         self.num_users = num_users
         self.num_users = num_users
@@ -94,7 +95,7 @@ class UserProfileGenerator:
 class DataInserter:
     """handle the insertion of data into the database."""
 
-    def __init__(self, conn, days=NO_DAYS):  
+    def __init__(self, conn, days):  
         self.conn = conn
         self.days = days
 
@@ -161,6 +162,11 @@ class DataInserter:
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Generate synthetic health app data.")
+    parser.add_argument('--users', type=int, default=NO_USERS, help='Number of users to generate')
+    parser.add_argument('--days', type=int, default=NO_DAYS, help='Number of days to generate data for')
+    args = parser.parse_args()
+
     db_manager = DatabaseManager()
     conn = db_manager.connect()
 
@@ -172,10 +178,10 @@ def main():
         db_manager.ensure_tables_exist(conn)
 
         print("Generating synthetic data...")
-        user_generator = UserProfileGenerator()
+        user_generator = UserProfileGenerator(num_users=args.users)
         users = user_generator.generate_user_profiles()
 
-        data_inserter = DataInserter(conn)
+        data_inserter = DataInserter(conn, days=args.days)
         data_inserter.insert_user_data(users)
         data_inserter.insert_nutrition_log(users)
 

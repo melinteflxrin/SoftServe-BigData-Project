@@ -4,3 +4,4 @@ matplotlib
 python-dotenv
 Faker
 requests
+tk
