@@ -20,6 +20,7 @@ It demonstrates best practices in ETL, data governance, privacy, and analytics w
 5. [Database Administration & Data Governance](#5-database-administration--data-governance)
     - [5.1 Database Administration](#51-database-administration)<br>
     - [5.2 Data Governance](#52-data-governance)<br>
+6. [Graphical User Interface (GUI)](#6-graphical-user-interface-gui)
 
 ---
 
@@ -459,7 +460,7 @@ The data warehouse is organized into three schemas: **raw**, **staging**, and **
 
 ---
 
-## 6. Graphical User Interface (GUI) for ETL Pipeline
+## 6. Graphical User Interface (GUI)
 
 A simple GUI is included to make running the ETL pipeline and generating dashboards more user-friendly.
 
