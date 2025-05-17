@@ -209,16 +209,16 @@ The ETL pipeline consists of the following stages, each with a dedicated script:
 <details>
 <summary>Show Sample Trusted Nutrition</summary>
 
-![Sample Trusted Nutrition Data](assets/sample-trusted-nutrition-log.png)  
+![Sample Trusted Nutrition Data](assets/sample-trusted-nutrition-data.png)  
 *Example of the `trusted.nutrition_data` table after loading.*
 
 </details>
 
 <details>
-<summary>Show Sample Trusted Activity</summary>
+<summary>Show Sample Trusted Goals</summary>
 
-![Sample Trusted Activity Data](assets/sample-trusted-activity-data.png)  
-*Example of the `trusted.activity_data` table after loading.*
+![Sample Trusted Goals Data](assets/sample-trusted-goals-data.png)  
+*Example of the `trusted.goals_data` table after loading.*
 
 </details>
 
@@ -272,6 +272,13 @@ The data warehouse is organized into three schemas: **raw**, **staging**, and **
 
 #### Staging Schema
 - **Purpose**: Stores cleaned and transformed data, ready for further processing.  
+<details>
+<summary>Show Staging Schema Star Diagram</summary>
+
+![Staging Star Diagram](assets/staging-star-diagram-mermaid.png)  
+*Star diagram for the staging schema, illustrating fact and dimension tables and their relationships.*
+
+</details>
 
 #### `staging.dim_user_profile`
 | Column Name       | Data Type     | Description                                      |
@@ -343,15 +350,19 @@ The data warehouse is organized into three schemas: **raw**, **staging**, and **
 
 #### Trusted Schema
 - **Purpose**: Stores the final, fully processed data that is ready for analytics and reporting.  
+<details>
+<summary>Show Trusted Schema Star Diagram</summary>
+
+![Trusted Star Diagram](assets/trusted-star-diagram-mermaid.png)  
+*Star diagram for the trusted schema, illustrating the relationships between tables.*
+
+</details>
 
 #### `trusted.nutrition_data`
 | Column Name         | Data Type        | Description                                      |
 |---------------------|-----------------|--------------------------------------------------|
 | `nutrition_id`      | `BIGINT PRIMARY KEY` | Unique identifier for the nutrition record. |
-| `user_id`           | `BIGINT`        | Unique identifier for the user.                  |
-| `user_name`         | `VARCHAR(255)`  | User's name.                                     |
-| `age`               | `INT`           | User's age.                                      |
-| `gender`            | `VARCHAR(50)`   | User's gender.                                   |
+| `user_id`           | `BIGINT`        | Unique identifier for the user (foreign key to PII table). |
 | `date`              | `DATE`          | Date of the nutrition log.                       |
 | `food_item`         | `VARCHAR(255)`  | Name of the food item.                           |
 | `meal_type`         | `VARCHAR(100)`  | Type of meal (e.g., breakfast, lunch).           |
@@ -364,10 +375,7 @@ The data warehouse is organized into three schemas: **raw**, **staging**, and **
 | Column Name         | Data Type        | Description                                      |
 |---------------------|-----------------|--------------------------------------------------|
 | `activity_id`       | `BIGINT PRIMARY KEY` | Unique identifier for the activity record.   |
-| `user_id`           | `BIGINT`        | Unique identifier for the user.                  |
-| `user_name`         | `VARCHAR(255)`  | User's name.                                     |
-| `age`               | `INT`           | User's age.                                      |
-| `gender`            | `VARCHAR(50)`   | User's gender.                                   |
+| `user_id`           | `BIGINT`        | Unique identifier for the user (foreign key to PII table). |
 | `timestamp`         | `TIMESTAMP`     | Timestamp of the activity.                       |
 | `activity_type`     | `VARCHAR(100)`  | Type of activity (e.g., walking, running).       |
 | `steps`             | `INT`           | Number of steps taken during the activity.       |
@@ -378,10 +386,7 @@ The data warehouse is organized into three schemas: **raw**, **staging**, and **
 | Column Name             | Data Type        | Description                                      |
 |-------------------------|-----------------|--------------------------------------------------|
 | `sleep_id`              | `BIGINT PRIMARY KEY` | Unique identifier for the sleep record.      |
-| `user_id`               | `BIGINT`        | Unique identifier for the user.                  |
-| `user_name`             | `VARCHAR(255)`  | User's name.                                     |
-| `age`                   | `INT`           | User's age.                                      |
-| `gender`                | `VARCHAR(50)`   | User's gender.                                   |
+| `user_id`               | `BIGINT`        | Unique identifier for the user (foreign key to PII table). |
 | `date`                  | `DATE`          | Date of the sleep record.                        |
 | `sleep_start`           | `TIMESTAMP`     | Start time of sleep.                             |
 | `sleep_end`             | `TIMESTAMP`     | End time of sleep.                               |
@@ -392,15 +397,24 @@ The data warehouse is organized into three schemas: **raw**, **staging**, and **
 | Column Name         | Data Type        | Description                                      |
 |---------------------|-----------------|--------------------------------------------------|
 | `goal_id`           | `BIGINT PRIMARY KEY` | Unique identifier for the goal record.        |
-| `user_id`           | `BIGINT`        | Unique identifier for the user.                  |
-| `user_name`         | `VARCHAR(255)`  | User's name.                                     |
-| `age`               | `INT`           | User's age.                                      |
-| `gender`            | `VARCHAR(50)`   | User's gender.                                   |
+| `user_id`           | `BIGINT`        | Unique identifier for the user (foreign key to PII table). |
 | `date`              | `DATE`          | Date of the goal record.                         |
 | `goal_type`         | `VARCHAR(100)`  | Type of goal (e.g., calories burned, steps).     |
 | `target_value`      | `INT`           | Target value for the goal.                       |
 | `actual_value`      | `INT`           | Actual value achieved for the goal.              |
-| `status`            | `VARCHAR(50)`   | Status of the goal (e.g., achieved, not achieved).|
+| `status`            | `VARCHAR(50)`   | Status of the goal (e.g., achieved, not achieved, pending). |
+
+#### `trusted.user_profile`
+| Column Name         | Data Type        | Description                                      |
+|---------------------|-----------------|--------------------------------------------------|
+| `user_id`           | `BIGINT PRIMARY KEY` | Unique identifier for the user.              |
+| `name`              | `VARCHAR(255)`  | User's name (PII, access restricted).            |
+| `age`               | `INT`           | User's age (PII, access restricted).             |
+| `gender`            | `VARCHAR(50)`   | User's gender (PII, access restricted).          |
+
+> **Note:**  
+> All analytics and reporting are performed using the trusted fact tables, which only reference users by `user_id`.  
+> PII is only accessible to authorized roles.
 
 --- 
 

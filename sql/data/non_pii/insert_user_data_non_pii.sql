@@ -9,5 +9,5 @@ SELECT
         WHEN age < 50 THEN '40s'
         ELSE '50_plus'
     END AS age_group
-FROM trusted.user_data_pii
+FROM trusted.user_profile
 ON CONFLICT (user_hash) DO NOTHING;

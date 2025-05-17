@@ -1,10 +1,11 @@
 CREATE OR REPLACE VIEW trusted.vw_user_daily_avg_calories_burned AS
 SELECT
-    user_id,
-    user_name,
-    ROUND(AVG(calories_burned),1) AS avg_calories_burned
+    a.user_id,
+    u.name AS user_name,
+    ROUND(AVG(a.calories_burned), 1) AS avg_calories_burned
 FROM
-    trusted.activity_data
+    trusted.activity_data a
+    JOIN trusted.user_profile u ON a.user_id = u.user_id
 GROUP BY
-    user_id,
-    user_name;
+    a.user_id,
+    u.name;

@@ -1,14 +1,15 @@
 CREATE OR REPLACE VIEW trusted.vw_pct_users_achieved_goals AS
 WITH user_goals AS (
     SELECT
-        user_id,
-        user_name,
-        goal_type,
-        date,
-        target_value,
-        actual_value
+        gd.user_id,
+        up.name AS user_name,
+        gd.goal_type,
+        gd.date,
+        gd.target_value,
+        gd.actual_value
     FROM
-        trusted.goals_data
+        trusted.goals_data gd
+        JOIN trusted.user_profile up ON gd.user_id = up.user_id
 )
 , goal_stats AS (
     SELECT
