@@ -457,3 +457,41 @@ The data warehouse is organized into three schemas: **raw**, **staging**, and **
 
 ---
 
+---
+
+## 6. Graphical User Interface (GUI) for ETL Pipeline
+
+A simple GUI is included to make running the ETL pipeline and generating dashboards more user-friendly.
+
+### How it Works
+
+- The GUI is built with [Tkinter](https://docs.python.org/3/library/tkinter.html).
+- Launch it with:
+  ```sh
+  python src/interface/main.py
+  ```
+- The interface will prompt you to enter:
+  - Number of Users
+  - Number of Days
+  - Database Host, Port, User, Password, and Name
+  - USDA API Key
+
+When you click **"Run Pipeline"**, the GUI passes your input as command-line arguments and environment variables to the ETL scripts. The scripts are then run in sequence: extract, transform, load, and dashboard generation.
+
+**File location:**  
+[`src/interface/main.py`](src/interface/main.py)
+
+**Important:**  
+- If you use the GUI, your input for number of users and days will be used for that run.
+- If you run the extract script directly (e.g., `python src/extract/healthapp.py`), it will use the default global variables (`NO_USERS` and `NO_DAYS`) defined in the script.
+
+**Example GUI window:**  
+<details>
+<summary>Show Example GUI window</summary>
+
+![GUI Example](assets/gui-example.png)  
+*The GUI for running the ETL pipeline and dashboards with custom parameters.*
+
+</details>
+
+---
