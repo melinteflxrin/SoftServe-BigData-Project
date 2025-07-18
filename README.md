@@ -108,7 +108,7 @@ This script ([`src/dashboard/dashboard.py`](src/dashboard/dashboard.py)) automat
     ```bash
     python src/extract/healthapp.py
     ```
-  - This script creates the necessary schemas and tables in the `raw` schema (if they do not already exist) and populates them with raw user data (see [`raw.user_data`](#rawuserdata)), for activity, sleep, nutrition, and goals.  
+  - This script creates the necessary schemas and tables in the `raw` schema (if they do not already exist) and populates them with raw user data (see [`raw.user_data`](sql/tables/raw/create_raw_user_data_table.sql)), for activity, sleep, nutrition, and goals.  
 - [**USDA API**](https://www.ers.usda.gov/developer/data-apis/): Nutritional data for food items is fetched dynamically via API calls within the [`healthapp.py`](src/extract/healthapp.py) script.  
 
 ---
